@@ -1,7 +1,10 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { User } from '../schemas/user.schema';
+import { UserService } from '../user.service';
 
 @Controller('login')
 export class LoginController {
+constructor(private readonly userService: UserService) {}
 
 @Get()
   findAll(): string {
@@ -9,8 +12,9 @@ export class LoginController {
   }
   
 @Post()
-   makeCall(): string {
-     return "you made a call";
+   async logIn(@Body() user: User): Promise<User>{
+     return this.userService.signIn(user.username, user.password);
+   
    }
 
 }
