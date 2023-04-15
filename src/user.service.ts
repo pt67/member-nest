@@ -3,13 +3,14 @@ import { InjectConnection } from '@nestjs/mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
-
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
  constructor(
  @InjectModel('User') 
- private userModel: Model<User>
+ private userModel: Model<User>,
+ private jwtService: JwtService
  ) {}
 
   async create(user: User): Promise<User> {
@@ -31,7 +32,10 @@ export class UserService {
       throw new UnauthorizedException();
     }
     
-    return user[0].name;
+    const payload = { username: user[0].username, id: user[0]._id };
+    return {
+      access_token: await this.jwtService.signAsync(payload, { secret: "myprivatekey" }),
+    };
     
     
   
