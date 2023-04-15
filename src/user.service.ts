@@ -9,7 +9,8 @@ import { User } from './schemas/user.schema';
 export class UserService {
  constructor(
  @InjectModel('User') 
- private userModel: Model<User>
+ private userModel: Model<User>,
+ //private authService: AuthService
  ) {}
 
   async create(user: User): Promise<User> {
@@ -23,16 +24,16 @@ export class UserService {
   
   
   
-  async signIn(username, pass): Promise<any> {
-    const user = await this.userModel.findOne(username);
+  async signIn(uname: string, pass: string): Promise<any> {
+    const user = await this.userModel.find({username: uname});
     
-    if (user?.password !== pass) {
+   // return user;
+    if (user.length == 0) {
       throw new UnauthorizedException();
-    }else{
-      return user.username;
     }
     
-    
+    return "authorized.";
+  
  
   }
   

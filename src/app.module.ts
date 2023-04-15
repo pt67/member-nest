@@ -9,6 +9,7 @@ import { UserService } from './user.service';
 import { UserModule } from './user/user.module';
 
 
+
 @Module({
   imports: [MongooseModule.forRoot('mongodb://localhost/nest'), MongooseModule.forFeature([{ name: User.name, schema: UserSchema}]), UserModule],
   controllers: [AppController, SignupController, LoginController],
